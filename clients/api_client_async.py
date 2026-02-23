@@ -75,6 +75,10 @@ class HdeApiAsync:
                 response = await self.client.get(path, params=params)
             elif m == "POST":
                 response = await self.client.post(path, params=params, json=data)
+            elif m == "PUT":
+                response = await self.client.put(path, params=params, json=data)
+            elif m == "DELETE":
+                response = await self.client.delete(path, params=params)
             else:
                 print(f"[_request] Неподдерживаемый метод: {m}")
                 return None

@@ -1,4 +1,12 @@
-ListToStrParams = ['department_list', 'status_list']
+ListToStrParams = [
+    'department_list',
+    'status_list',
+    'priority_list',
+    'type_list',
+    'user_list',
+    'owner_list',
+    'source_list',
+]
 
 main_b2c_departments = [589, 1699, 1700, 1307, 107, 1703, 1704, 1706, 1702, 1305, 1701, 141]
 

@@ -56,6 +56,10 @@ class HdeApi:
                 response = self._http.get(path, params=params)
             elif m == "POST":
                 response = self._http.post(path, params=params, json=data)
+            elif m == "PUT":
+                response = self._http.put(path, params=params, json=data)
+            elif m == "DELETE":
+                response = self._http.delete(path, params=params)
             else:
                 print(f"[_request] Неподдерживаемый метод: {m}")
                 return None

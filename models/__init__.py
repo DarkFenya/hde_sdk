@@ -6,4 +6,10 @@ from models.models import (
     GetUsersParams,
     GetUsersExtraParams,
     CreateMessageProto,
+    CreateTicketParams,
+    UpdateTicketParams,
+    Pagination,
+    TicketData,
+    TicketsListResponse,
+    TicketSingleResponse,
 )
