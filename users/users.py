@@ -1,11 +1,18 @@
-from typing import Unpack
+from typing import Unpack, Any
 
-from models import GetUsersExtraParams, GetUsersParams
+from models import (
+    GetUsersExtraParams,
+    GetUsersParams,
+    CreateUserParams,
+    UpdateUserParams,
+)
 
 
 class Users:
     def __init__(self, api):
         self._api = api
+
+    # ── GET /users/ ───────────────────────────────────────────────────────────
 
     def get_users_page(
         self,
@@ -19,6 +26,9 @@ class Users:
     ):
         """
         Получить одну страницу пользователей.
+
+        Sync:  client.users.get_users_page(page=1)
+        Async: await async_client.users.get_users_page(page=1)
 
         Args:
             page: Номер страницы (30 пользователей на странице).
@@ -40,6 +50,187 @@ class Users:
             **kwargs,
         }
         return self._api._request("GET", "users/", params)
+
+    # ── GET /users/:id/ ──────────────────────────────────────────────────────
+
+    def get_user_by_id(self, user_id: int):
+        """
+        Получить пользователя по ID.
+
+        Sync:  client.users.get_user_by_id(123)
+        Async: await async_client.users.get_user_by_id(123)
+
+        Args:
+            user_id: ID пользователя.
+        """
+        return self._api._request("GET", f"users/{user_id}/")
+
+    # ── POST /users/ ─────────────────────────────────────────────────────────
+
+    def create_user(
+        self,
+        name: str,
+        email: str,
+        password: str | None = None,
+        group_id: int | None = None,
+        department: list[int] | None = None,
+        lastname: str | None = None,
+        alias: str | None = None,
+        phone: str | None = None,
+        skype: str | None = None,
+        website: str | None = None,
+        organization: str | None = None,
+        organiz_id: int | None = None,
+        status: str | None = None,
+        language: str | None = None,
+        notifications: int | None = None,
+        user_status: str | None = None,
+        custom_fields: dict[str, Any] | None = None,
+    ):
+        """
+        Создать пользователя.
+
+        Sync:  client.users.create_user(name='Иван', email='ivan@example.com')
+        Async: await async_client.users.create_user(name='Иван', email='ivan@example.com')
+
+        Args:
+            name: Имя пользователя (обязательно).
+            email: Email пользователя (обязательно).
+            password: Пароль.
+            group_id: ID группы (клиент / сотрудник / администратор).
+            department: Список ID доступных департаментов.
+            lastname: Фамилия.
+            alias: Псевдоним.
+            phone: Телефон.
+            skype: Скайп.
+            website: Адрес сайта.
+            organization: Название компании (создаст новую, если не существует).
+            organiz_id: ID существующей компании (игнорируется, если передан organization).
+            status: Статус: 'active', 'disabled', 'fired'.
+            language: Язык ('ru', 'en', ...).
+            notifications: Уведомления на почту (1 — вкл, 0 — выкл).
+            user_status: Статус активности ('online', 'offline').
+            custom_fields: Индивидуальные поля {'field_id': value}.
+        """
+        data: CreateUserParams = {
+            "name": name,
+            "email": email,
+        }
+        _optional = {
+            "password": password,
+            "group_id": group_id,
+            "department": department,
+            "lastname": lastname,
+            "alias": alias,
+            "phone": phone,
+            "skype": skype,
+            "website": website,
+            "organization": organization,
+            "organiz_id": organiz_id,
+            "status": status,
+            "language": language,
+            "notifications": notifications,
+            "user_status": user_status,
+            "custom_fields": custom_fields,
+        }
+        for k, v in _optional.items():
+            if v is not None:
+                data[k] = v
+
+        return self._api._request("POST", "users/", data=data)
+
+    # ── PUT /users/:id/ ──────────────────────────────────────────────────────
+
+    def update_user(
+        self,
+        user_id: int,
+        name: str | None = None,
+        email: str | None = None,
+        password: str | None = None,
+        group_id: int | None = None,
+        department: list[int] | None = None,
+        lastname: str | None = None,
+        alias: str | None = None,
+        phone: str | None = None,
+        skype: str | None = None,
+        website: str | None = None,
+        organization: str | None = None,
+        organiz_id: int | None = None,
+        status: str | None = None,
+        language: str | None = None,
+        notifications: int | None = None,
+        user_status: str | None = None,
+        custom_fields: dict[str, Any] | None = None,
+    ):
+        """
+        Обновить пользователя.
+
+        Передавай только те поля, которые нужно изменить.
+
+        Sync:  client.users.update_user(123, phone='+7999...')
+        Async: await async_client.users.update_user(123, phone='+7999...')
+
+        Args:
+            user_id: ID пользователя.
+            name: Имя.
+            email: Email.
+            password: Пароль.
+            group_id: ID группы.
+            department: Список ID доступных департаментов.
+            lastname: Фамилия.
+            alias: Псевдоним.
+            phone: Телефон.
+            skype: Скайп.
+            website: Адрес сайта.
+            organization: Название компании.
+            organiz_id: ID существующей компании.
+            status: Статус: 'active', 'disabled', 'fired'.
+            language: Язык ('ru', 'en', ...).
+            notifications: Уведомления на почту (1 — вкл, 0 — выкл).
+            user_status: Статус активности.
+            custom_fields: Индивидуальные поля {'field_id': value}.
+        """
+        data: UpdateUserParams = {}
+        _fields = {
+            "name": name,
+            "email": email,
+            "password": password,
+            "group_id": group_id,
+            "department": department,
+            "lastname": lastname,
+            "alias": alias,
+            "phone": phone,
+            "skype": skype,
+            "website": website,
+            "organization": organization,
+            "organiz_id": organiz_id,
+            "status": status,
+            "language": language,
+            "notifications": notifications,
+            "user_status": user_status,
+            "custom_fields": custom_fields,
+        }
+        for k, v in _fields.items():
+            if v is not None:
+                data[k] = v
+
+        return self._api._request("PUT", f"users/{user_id}/", data=data)
+
+    # ── DELETE /users/:id/ ────────────────────────────────────────────────────
+
+    def delete_user(self, user_id: int):
+        """
+        Удалить пользователя.
+
+        Sync:  client.users.delete_user(123)
+        Async: await async_client.users.delete_user(123)
+
+        Args:
+            user_id: ID пользователя.
+        """
+        return self._api._request("DELETE", f"users/{user_id}/")
+
+    # ── Пагинация ─────────────────────────────────────────────────────────────
 
     def get_users_lazy(
         self,

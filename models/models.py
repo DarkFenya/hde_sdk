@@ -190,3 +190,97 @@ class TicketsListResponse(TypedDict, total=False):
 class TicketSingleResponse(TypedDict, total=False):
     """Ответ GET /tickets/:id/, POST /tickets/, PUT /tickets/:id/."""
     data: TicketData
+
+
+# ─── Enums (Users) ────────────────────────────────────────────────────────────
+
+class UserStatus(str, Enum):
+    active = 'active'
+    disabled = 'disabled'
+    fired = 'fired'
+
+
+# ─── POST /users/ — тело запроса ──────────────────────────────────────────────
+
+class CreateUserParams(TypedDict, total=False):
+    """Параметры для создания пользователя (POST /users/).
+
+    Обязательные: name, email.
+    """
+    name: str                      # required
+    email: str                     # required
+    password: str
+    group_id: int
+    department: list[int]
+    lastname: str
+    alias: str
+    phone: str
+    skype: str
+    website: str
+    organization: str
+    organiz_id: int
+    status: str
+    language: str
+    notifications: int
+    user_status: str
+    custom_fields: dict[str, Any]
+
+
+# ─── PUT /users/:id/ — тело запроса ───────────────────────────────────────────
+
+class UpdateUserParams(TypedDict, total=False):
+    """Параметры для обновления пользователя (PUT /users/:id/).
+
+    Все поля опциональны — передаётся только то, что нужно изменить.
+    """
+    name: str
+    email: str
+    password: str
+    group_id: int
+    department: list[int]
+    lastname: str
+    alias: str
+    phone: str
+    skype: str
+    website: str
+    organization: str
+    organiz_id: int
+    status: str
+    language: str
+    notifications: int
+    user_status: str
+    custom_fields: dict[str, Any]
+
+
+# ─── Response-модели (Users) ──────────────────────────────────────────────────
+
+class UserGroupData(TypedDict, total=False):
+    """Группа пользователя."""
+    id: int
+    type: str
+    name: dict[str, str]
+    disable: int
+
+
+class UserData(TypedDict, total=False):
+    """Один пользователь, как его возвращает API."""
+    id: int
+    date_created: str
+    date_updated: str
+    name: str
+    lastname: str
+    alias: str
+    email: str
+    phone: str
+    skype: str
+    website: str
+    organization: str | dict[str, Any]
+    status: str
+    language: str
+    notifications: int | str
+    api_key: str
+    group: UserGroupData
+    department: list[int]
+    ldap_username: str | None
+    user_status: str
+    custom_fields: list[dict[str, Any]] | list

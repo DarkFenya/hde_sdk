@@ -13,6 +13,8 @@ build/
 .venv/
 venv/
 env/
+oracle_connect.py
+postgre_connect.py
 .env/
 
 # Environment variables
